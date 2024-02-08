@@ -1,5 +1,6 @@
 let numeroSecreto = generarNumeroSecreto();
 let intentos = 0;
+const maxIntentos = 3; // Definimos el máximo de intentos
 
 function asignarTextoElemento(elemento, texto) {
     let elementoHTML = document.querySelector(elemento);
@@ -11,7 +12,7 @@ function verificarIntento() {
     let numeroDeUsuario = parseInt(document.getElementById('valorUsuario').value);
     
     if (numeroDeUsuario === numeroSecreto) {
-        asignarTextoElemento('p',`Acertaste el número en ${intentos} ${(intentos === 1) ? 'vez' : 'veces'}`);
+        asignarTextoElemento('p',`Acertaste el número en ${intentos + 1} ${(intentos === 0) ? 'intento' : 'intentos'}`); // Modificamos para mostrar el número de intentos correctamente
         document.getElementById('reiniciar').removeAttribute('disabled');
     } else {
         //El usuario no acertó.
@@ -21,7 +22,12 @@ function verificarIntento() {
             asignarTextoElemento('p','El número secreto es mayor');
         }
         intentos++;
-        limpiarCaja();
+        if (intentos >= maxIntentos) { // Si se alcanza el máximo de intentos
+            asignarTextoElemento('p', `Agotaste tus ${maxIntentos} intentos. El número secreto era ${numeroSecreto}`);
+            document.getElementById('reiniciar').removeAttribute('disabled');
+        } else {
+            limpiarCaja();
+        }
     }
     return;
 }
@@ -57,7 +63,7 @@ function condicionesIniciales() {
     asignarTextoElemento('h1','Juego del número secreto!');
     asignarTextoElemento('p',`Indica un número del 1 al ${numeroMaximo}`);
     numeroSecreto = generarNumeroSecreto();
-    intentos = 1;
+    intentos = 0; // Reiniciamos el contador de intentos
     console.log(numeroSecreto);
 }
 
